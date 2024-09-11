@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 const app = (0, express_1.default)();
 // Configures cors to allow only trusted hosts
 app.use((0, cors_1.default)({
-    origin: process.env.NODE_END === 'dev' ? '*' : process.env.ORIGINS?.split(',') || [],
+    origin: process.env.NODE_ENV === 'dev' ? '*' : process.env.ORIGINS?.split(',') || [],
     methods: ['GET']
 }));
 // Swagger config and setup
@@ -24,6 +24,13 @@ app.use((0, cors_1.default)({
  * @returns A boolean indicating whether the team ID is valid.
  */
 const isTeamIdValid = async (id) => id > 0;
+/**
+ * Redirects requests from the root URL ("/") to the API documentation ("/api-docs").
+ * @param _   - The request object (not used).
+ * @param res - The response object used to redirect.
+ * @returns None
+ */
+app.get('/', (_, res) => res.redirect('/api-docs'));
 /**
  * Retrieves a team by its ID.
  * @param req - The request object containing the team ID in the URL parameters.

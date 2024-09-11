@@ -14,7 +14,7 @@ const app = express()
 
 // Configures cors to allow only trusted hosts
 app.use(cors({
-  origin: process.env.NODE_END === 'dev' ? '*' :  process.env.ORIGINS?.split(',') || [],
+  origin: process.env.NODE_ENV === 'dev' ? '*' :  process.env.ORIGINS?.split(',') || [],
   methods: ['GET']
 }))
 
