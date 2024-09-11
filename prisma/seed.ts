@@ -54,6 +54,7 @@ async function fetchTeamsFromApi(
   limit: number, offset: number = 0, api: ReturnType<typeof createApiClient>
 ): Promise<Team[]> {  
   try {
+    console.log(`[SEED]: Requesting: ${api.getUri()}`)
     const res = await api.get<TeamsRangedQuery>(`/teams?limit=${limit}&offset=${offset}`)
     return res.data.teams
   } catch (error) {
