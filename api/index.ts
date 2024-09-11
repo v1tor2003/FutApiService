@@ -5,11 +5,18 @@ import cors from 'cors'
 import { TeamRequestParams } from './types'
 import prisma from '../prisma/conn'
 
+import swaggerUi from 'swagger-ui-express'
+import swaggerFile from './swagger.json'
+
 dotenv.config()
 
 const app = express()
-app.use(cors())
-// should configure cors to allow requests from the github pages app
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+app.use(cors({
+  origin: process.env.ORIGINS?.split(',') || [],
+  methods: ['GET']
+}))
+
 const PORT = process.env.PORT || 3000
 
 /**
