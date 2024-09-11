@@ -114,10 +114,12 @@ async function getTeams(amount: number, offset: number = 0): Promise<Team[]>{
  * @returns A promise that resolves when the seeding process is complete.
  */
 async function main(): Promise<void> {
-  console.log('[SEED]: Cleaning up db to seed...')
-  await prisma.team.deleteMany()
-  console.log('[SEED]: Fetching teams...')
-  const newTeams: Omit<Team, 'id'>[] = (await getTeams(1000)).map(({ id, ...rest }: Team) => rest)
+  const amount: number = 1_000
+  const offset: number = await prisma.team.count()
+  console.log('[SEED]: Seeding db started.\n' + 
+              `[SEED]: Existing teams in database: ${offset}.\n` +
+              `[SEED]: Fetching more ${amount} teams.`)
+  const newTeams: Omit<Team, 'id'>[] = (await getTeams(amount, offset)).map(({ id, ...rest }: Team) => rest)
   await prisma.team.createMany({ data: newTeams })
 }
 
