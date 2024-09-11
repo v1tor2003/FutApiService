@@ -10,9 +10,11 @@
   "scripts": {
     "dev": "ts-node api/index.ts",
     "build": "rimraf dist && tsc",
+    "post-install": "prisma generate && prisma migrate deploy",
     "vercel-build": "prisma generate && prisma db push && prisma migrate deploy && npm run build",
     "ts.check": "tsc --project tsconfig.json",
-    "start": "node dist/api/index.js"
+    "start": "node dist/api/index.js",
+    "add-build": "git add dist"
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
