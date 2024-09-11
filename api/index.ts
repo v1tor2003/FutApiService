@@ -29,6 +29,14 @@ setupSwagger(app)
 const isTeamIdValid = async (id: number) => id > 0
 
 /**
+ * Redirects requests from the root URL ("/") to the API documentation ("/api-docs").
+ * @param _   - The request object (not used).
+ * @param res - The response object used to redirect.
+ * @returns None
+ */
+app.get('/', (_, res: Response) => res.redirect('/api-docs'))
+
+/**
  * Retrieves a team by its ID.
  * @param req - The request object containing the team ID in the URL parameters.
  * @param res - The response object used to send the response back to the client.
