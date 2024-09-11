@@ -4,20 +4,22 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { TeamRequestParams } from './types'
 import prisma from '../prisma/conn'
-
-import swaggerUi from 'swagger-ui-express'
-import swaggerFile from './swagger.json'
+import { setupSwagger } from './swagger'
 
 dotenv.config()
 
+const PORT = process.env.PORT || 3000
+
 const app = express()
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
+// Configures cors to allow only trusted hosts
 app.use(cors({
-  origin: process.env.ORIGINS?.split(',') || [],
+  origin: process.env.NODE_END === 'dev' ? '*' :  process.env.ORIGINS?.split(',') || [],
   methods: ['GET']
 }))
 
-const PORT = process.env.PORT || 3000
+// Swagger config and setup
+setupSwagger(app)
 
 /**
  * Checks if the provided team ID is valid.

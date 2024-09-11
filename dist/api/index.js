@@ -7,11 +7,17 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const conn_1 = __importDefault(require("../prisma/conn"));
+const swagger_1 = require("./swagger");
 dotenv_1.default.config();
-const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
-// should configure cors to allow requests from the github pages app
 const PORT = process.env.PORT || 3000;
+const app = (0, express_1.default)();
+// Configures cors to allow only trusted hosts
+app.use((0, cors_1.default)({
+    origin: process.env.NODE_END === 'dev' ? '*' : process.env.ORIGINS?.split(',') || [],
+    methods: ['GET']
+}));
+// Swagger config and setup
+(0, swagger_1.setupSwagger)(app);
 /**
  * Checks if the provided team ID is valid.
  * @param id - The ID of the team to validate.
