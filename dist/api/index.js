@@ -11,9 +11,16 @@ const swagger_1 = require("./swagger");
 dotenv_1.default.config();
 const PORT = process.env.PORT || 3000;
 const app = (0, express_1.default)();
+// Gets allowed origins from env
+const allowedOrigins = process.env.NODE_ENV === 'dev' ? '*' : process.env.ORIGINS?.split(',') || '*';
 // Configures cors to allow only trusted hosts
 app.use((0, cors_1.default)({
-    origin: process.env.NODE_ENV === 'dev' ? '*' : process.env.ORIGINS?.split(',') || [],
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin))
+            callback(null, true);
+        else
+            callback(new Error(`Origin: ${origin} not allowed by CORS.`));
+    },
     methods: ['GET']
 }));
 // Swagger config and setup
